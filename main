@@ -1,0 +1,21 @@
+clear
+clc;
+%객체선언 및 생성
+droneObj = ryze("TELLO-5CB1FD")
+cameraObj = camera(droneObj, 'FPV')
+preview(cameraObj)
+% 이륙
+takeoff(droneObj)
+
+% roll 은 오른쪽 왼쪽 이동
+% pitch 는 전진 후진 이동
+% yaw는 회전
+
+%roll(좌우)이동이므로 오른쪽으로 이동
+moveright(droneObj, 'Distance', 2.8)
+
+%pitch(전진)이동을 위해 yaw(회전) 200도
+turn(droneObj, deg2rad(200))
+
+%pitch(전진)
+moveforward(droneObj, 'Distance',2.1)
