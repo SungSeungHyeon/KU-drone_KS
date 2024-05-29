@@ -19,3 +19,21 @@ turn(droneObj, deg2rad(200))
 
 %pitch(전진)
 moveforward(droneObj, 'Distance',2.1)
+
+%pitch(전진)이동을 위해 yaw(회전) 70도
+turn(droneObj, deg2rad(70))
+
+%pitch(전진)
+moveforward(droneObj, 'Distance',1.8)
+
+% 스냅샷
+frame = snapshot(cameraObj);
+
+%roll(좌우)이동을 위해 yaw(회전) 반대편으로 20도
+turn(droneObj, deg2rad(-20))
+
+%roll(좌우)로 이동
+moveright(droneObj, 'Distance',2.1)
+
+%착륙
+land(droneObj)
