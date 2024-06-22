@@ -46,3 +46,33 @@ for i = 1:5
         centeroid_result(i,:) = [NaN, NaN];
     end
 end
+
+% 결과 출력
+for i = 1:5
+    fprintf('centeroid_result of %d image is [X_point , Y_point] = [%.2f , %.2f] \n', i, centeroid_result(i,1), centeroid_result(i,2));
+end
+
+function [BW,maskedRGBImage] = createMask(RGB, ...
+    channel1Min, channel1Max, ...
+    channel2Min, channel2Max, ...
+    channel3Min, channel3Max)
+%createMask Threshold RGB image using auto-generated code from colorThresholder app.
+%  [BW,MASKEDRGBIMAGE] = createMask(RGB) thresholds image RGB using
+%  auto-generated code from the colorThresholder app. The colorspace and
+%  range for each channel of the colorspace were set within the app. The
+%  segmentation mask is returned in BW, and a composite of the mask and
+%  original RGB images is returned in maskedRGBImage.
+
+% Convert RGB image to chosen color space
+I = rgb2hsv(RGB);
+
+% Create mask based on chosen histogram thresholds
+sliderBW = (I(:,:,1) >= channel1Min ) & (I(:,:,1) <= channel1Max) & ...
+    (I(:,:,2) >= channel2Min ) & (I(:,:,2) <= channel2Max) & ...
+    (I(:,:,3) >= channel3Min ) & (I(:,:,3) <= channel3Max);
+BW = sliderBW;
+
+% Initialize output masked image based on input image.
+maskedRGBImage = RGB;
+maskedRGBImage(repmat(~BW,[1 1 3])) = 0;
+end
