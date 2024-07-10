@@ -41,3 +41,83 @@ stage_4의 방향으로 회전 이후 stage_1의 방식을 통해 카메라로 �
 원의 중심을 찾은 뒤 stage_1과 같은 방식으로 원의 중심과 사각형을 인식 후 사각형 중점과 center_point 차이가 거의 없을 때 앞으로 진행
 충분히 앞으로 진행 이후 END 지점 도달 이후 드론의 착륙
 
+
+3.소스코드 설명
+
+중심점 저장하는 배열하는 코드
+centroids = [];
+
+영상크기는 960 x 720 그럼 센터점은 각각 1/2지점과 1/3지점
+center_pts = [480, 240];
+
+stage마다 다른 count 값을 주기 위해서 count 초기화
+count = 0;
+repeat_count = 0;
+
+RGB 기준값 
+channel1,2,3 순서대로 RGB
+색 이진화 앱에서 그대로 들고 온 값
+% Define thresholds for channel 1 based on histogram settings
+channel1Min = 4.000;
+channel1Max = 58.000;
+% Define thresholds for channel 2 based on histogram settings
+channel2Min = 16.000;
+channel2Max = 88.000;
+% Define thresholds for channel 3 based on histogram settings
+channel3Min = 69.000;
+channel3Max = 165.000;
+
+HSV 기준값
+channel4,5,6 순서대로 HSV
+색 이진화 앱에서 그대로 들고 온 값
+
+% Define thresholds for channel 4 based on histogram settings
+channel4Min = 0.318;
+channel4Max = 0.701;
+% Define thresholds for channel 5 based on histogram settings
+channel5Min = 0.650;
+channel5Max = 1.000;
+% Define thresholds for channel 6 based on histogram settings
+channel6Min = 0.000;
+channel6Max = 1.000;
+
+객체선언 및 생성 후 이륙
+drone = ryze("TELLO-5CB1FD");
+    cam = camera(drone, 'FPV');
+    takeoff(drone);
+드론이 카메라로 영상을 캡처하고, RGB에서 HSV로 변환하여 파란색 범위를 검출합니다. regionprops 함수를 사용하여 검출된 영역의 속성을 측정하고, 가장 큰 영역의 중심점을 계산합니다. 이 중심점과 드론의 현재 위치 차이를 계산하여 드론을 이동시킵니다. 반복 과정을 통해 목표 위치에 도달하면 다음 스테이지로 넘어갑니다.
+
+frame이라는 변수에 현재 카메라 영상 캡처해서 저장
+frame = snapshot(cam);
+
+% 카메라 영상 실시간
+ preview(cam)
+        pause(1);
+    
+화면 전체를 사각형으로 인식하는 경우 예외 처리
+for j = 1:length(areaNemo)
+            boxCh = areaNemo(j).BoundingBox; 
+            if(boxCh(3) == 960 || boxCh(4) == 720)
+
+가장 큰 영역일 때 속성 추출
+areaCh <= areaNemo(j).Area
+areaCh = areaNemo(j).Area;
+                    centroid = areaNemo(j).Centroid;
+
+원의 중심을 빨간색 + 표시로 마커사이즈 20으로 표시
+plot(centroid(1), centroid(2), 'r+', 'MarkerSize', 20, 'LineWidth', 2);
+        hold off
+
+  사각형 중점과 center_point 차이
+  dis = centroid - center_pts;
+
+  사각형의 중점에서 x축y축이 사이거리 -35, 35안에있으면 while문에서 나온다
+  dis(1) <= 35 && dis(1) >= -35 && dis (2) <= 35 && dis(2) >= -35
+            disp("stage1 end")
+            break
+
+ 조건문은 dis(1)과 dis(2)의 절대값이 각각 35 이하인지를 확인합니다. 이는 중심점과 현재 위치의 차이가 특정 범위 내에 있는지를 확인하는 것입니다.
+if abs(dis(1)) <= 35 && abs(dis(2)) <= 35
+    disp 
+    break;
+end
