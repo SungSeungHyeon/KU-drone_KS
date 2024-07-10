@@ -38,7 +38,7 @@ channel6Max = 1.000;
 
 try
     % 객체선언 및 생성
-    drone = ryze("TELLO-5CB1FD");
+    drone = ryze();
     cam = camera(drone, 'FPV');
     takeoff(drone);
 
