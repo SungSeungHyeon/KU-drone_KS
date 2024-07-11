@@ -331,7 +331,7 @@ try
     end
     
     moveforward(drone, 'Distance', 3 , 'Speed', 1);
-    turn(drone,deg2rad(-130));
+    turn(drone,deg2rad(-125));
 
     disp("stage3 centroid start")
     
