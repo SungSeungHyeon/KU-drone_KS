@@ -161,7 +161,7 @@ try
 
     moveforward(drone, 'Distance', 3.5, 'Speed',1);
     turn(drone,deg2rad(130));
-    moveforward(drone, 'Distance', 2.3 , 'Speed', 1);
+    moveforward(drone, 'Distance', 2.2 , 'Speed', 1);
      
     disp("stage2 start")
     
@@ -677,7 +677,7 @@ try
 
     end
 
-    moveforward(drone, 'Distance', 4 , 'Speed', 1 )
+    moveforward(drone, 'Distance', 3.9 , 'Speed', 1 )
 
     land(drone);
          
